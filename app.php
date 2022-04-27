@@ -158,7 +158,7 @@ class Action implements ActionInterface
 
     public function __construct(string $name)
     {
-        
+       $this->name = $name; 
     }
     
     public function handle(VendingMachineInterface $vendingMachine): ResponseInterface
@@ -177,7 +177,7 @@ class Input implements InputInterface
     private MoneyCollection $moneyCollection;
     private Action $action;
 
-    public function __construct($moneyCollection, $action)
+    public function __construct(MoneyCollection $moneyCollection, Action $action)
     {
         $this->moneyCollection = $moneyCollection;
         $this->action = $action;
@@ -196,9 +196,9 @@ class Input implements InputInterface
 
 class InputHandler implements InputHandlerInterface
 {   
-    public $input;
+    public Input $input;
 
-    public function __construct($input)
+    public function __construct(Input $input)
     {
         $this->input = $input;
     }
@@ -215,11 +215,6 @@ class InputHandler implements InputHandlerInterface
 
 class InputParser implements InputParserInterface
 {
-    public $input;
-    public function __construct($input)
-    {
-        $this->input = $input;
-    }
     /**
      * @throws InvalidInputException
      */
@@ -228,12 +223,19 @@ class InputParser implements InputParserInterface
         $inputCommands = ['N','D','Q','DOLLAR','GET-A','GET-B','GET-C','RETURN-MONEY'];
 
         if (in_array($input, $inputCommands)) {
-            $input;
+           $name = $input;
+
+        } else {
+            echo "Insert correct action";
         }
-        
         $action = new Action($name);
         $moneyCollection = new MoneyCollection;
-        
+        $dollar = new Money(1.00, 'DOLLAR');
+        $moneyCollection->add($dollar);
+        $moneyCollection->sum();
+        $moneyCollection->sum($moneyCollection);
+
+
         return new Input($moneyCollection, $action); 
     }
 }
@@ -241,13 +243,15 @@ class InputParser implements InputParserInterface
 
 class Response implements ResponseInterface
 {
-    public $sum;
-    public $merge;
+    private $string;
 
-
+    public function __construct($object)
+    {
+        $this->object = $object;
+    }
     public function __toString(): string
     {
-        return $this->sum . $this->merge;
+        return $this->object;
     }
 
     public function getReturnCode(): int
@@ -258,19 +262,11 @@ class Response implements ResponseInterface
 
 class VendingMachine implements VendingMachineInterface
 {
-    public $moneyCollection;
-    public $response;
-    public $itemCollection;
-
-    public function __construct($moneyCollection, $response, $itemCollection)
-    {
-        $this->moneyCollection = $moneyCollection;
-        $this->response = $response;
-        $this->itemCollection = $itemCollection;
-    }
+    private ItemCollection $itemCollection;
+    private MoneyCollection $moneyCollection;
 
     public function addItem(ItemInterface $item): void    
-    {
+    {   $this->itemCollection = new ItemCollection;
         $this->itemCollection->add($item);
     }
 
@@ -281,18 +277,19 @@ class VendingMachine implements VendingMachineInterface
 
     public function insertMoney(MoneyInterface $money): void
     {
-        $this->moneyCollection->add($money);
+       
     }
 
     public function getInsertedMoney(): MoneyCollectionInterface
     {
-        $this->moneyCollection;
+        return $moneyCollection;
     }
 
     public function handleAction(ActionInterface $action): ResponseInterface
     {
-        $action->response;
-        return $this->response;
+        $name = $action->getName();
+        $response = new Response($name);
+        return $response;
     }
 }
 
@@ -320,9 +317,14 @@ $moneyCollection = new MoneyCollection;
 
 
 $readline = readline('Input: ');
-$inputHandler = new InputParser;
+$inputParser = new InputParser;
+$inputHandler = new InputHandler($input = $inputParser->parse($readline));
 
 
+
+$vendingMachine = new VendingMachine;
+$response = $vendingMachine->handleAction($inputHandler->getInput()->getAction());
+var_dump($response->__toString());
 
 
 
