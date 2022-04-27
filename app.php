@@ -154,19 +154,16 @@ class ItemCollection implements ItemCollectionInterface
 
 class Action implements ActionInterface
 {
-    public $name;
-    public $response;
+    private string $name;
 
-    public function __construct($response)
+    public function __construct(string $name)
     {
-        $this->response = $response;
+        
     }
-
+    
     public function handle(VendingMachineInterface $vendingMachine): ResponseInterface
     {
-        $this->response->sum = $vendingMachine;
-        $this->response->merge = $vendingMachine;
-        return $this->response;
+        return new Response;
     }
 
     public function getName(): string
@@ -177,9 +174,8 @@ class Action implements ActionInterface
 
 class Input implements InputInterface
 {
-    public $moneyCollection;
-    public $action;
-    public $input;
+    private MoneyCollection $moneyCollection;
+    private Action $action;
 
     public function __construct($moneyCollection, $action)
     {
@@ -194,8 +190,6 @@ class Input implements InputInterface
 
     public function getAction(): ActionInterface
     {   
-        $name = $this->input;
-        $this->action->name = $name;
         return $this->action;
     }
 }
@@ -214,7 +208,6 @@ class InputHandler implements InputHandlerInterface
      */
     public function getInput(): InputInterface
     {
-
         return $this->input;
     }
 
@@ -235,10 +228,13 @@ class InputParser implements InputParserInterface
         $inputCommands = ['N','D','Q','DOLLAR','GET-A','GET-B','GET-C','RETURN-MONEY'];
 
         if (in_array($input, $inputCommands)) {
-            $name = $input;
+            $input;
         }
-        $this->input->input = $name;
-        return $this->input; 
+        
+        $action = new Action($name);
+        $moneyCollection = new MoneyCollection;
+        
+        return new Input($moneyCollection, $action); 
     }
 }
 
@@ -321,28 +317,10 @@ $itemCollection = new ItemCollection;
 $moneyCollection = new MoneyCollection;
 
 
-$response = new Response;
-$vendingMachine = new VendingMachine($moneyCollection, $response, $itemCollection);
-$action = new Action($response, $vendingMachine);
-$input = new Input($moneyCollection, $action);
-$inputHandler = new InputHandler($input);
-$inputParser = new InputParser($input);
+
 
 $readline = readline('Input: ');
-$inputParser->parse($readline);
-
-if ($input->getAction()->getName() == 'DOLLAR') {
-    $vendingMachine->insertMoney($dollar);
-    $input->getMoneyCollection()->sum();
-    $input->getMoneyCollection()->merge($moneyCollection);
-    $action->handle($vendingMachine);
-    $vendingMachine->handleAction($action);
-}
-
-
-
-
-var_dump($vendingMachine);
+$inputHandler = new InputParser;
 
 
 
