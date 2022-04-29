@@ -37,7 +37,7 @@ class Money implements MoneyInterface
 
 class MoneyCollection implements MoneyCollectionInterface
 {
-    private array $moneyCollection;
+    private $moneyCollection;
     private float $sum;
     private $merge;
 
@@ -69,7 +69,7 @@ class MoneyCollection implements MoneyCollectionInterface
     }
 
     public function empty(): void
-    {
+    {   
         $this->moneyCollection = new MoneyCollection;
     }
 
@@ -156,8 +156,11 @@ class Action implements ActionInterface
     
     public function handle(VendingMachineInterface $vendingMachine): ResponseInterface
     {
-        
-        return new Response;
+        $action = $vendingMachine->getInsertedMoney()->toArray();
+        foreach ($action as $value) {
+            $response = new Response($value->getSymbol());
+        }
+        return $response;
     }
 
     public function getName(): string
@@ -222,14 +225,17 @@ class InputParser implements InputParserInterface
         } else {
             echo "Insert correct action";
         }
-
+      
         $action = new Action($name);
         $moneyCollection = new MoneyCollection;
-        
         $nickel = new Money(0.05, 'N');
         $dime = new Money(0.10, 'D');
         $quarter = new Money(0.25, 'Q');
         $dollar = new Money(1.00, 'DOLLAR');
+        $moneyCollection->add($dollar);
+ 
+
+
 
 
         return new Input($moneyCollection, $action); 
@@ -258,11 +264,17 @@ class Response implements ResponseInterface
 class VendingMachine implements VendingMachineInterface
 {
     private ItemCollection $itemCollection;
-    private MoneyCollection $moneyCollection;
+    public $moneyCollection;
+    private Input $input;
+
+    public function __construct($itemCollection, $input)
+    {
+        $this->itemCollection = $itemCollection;
+        $this->input = $input;
+    }
 
     public function addItem(ItemInterface $item): void    
     {   
-        $this->itemCollection = new ItemCollection;
         $this->itemCollection->add($item);
     }
 
@@ -278,8 +290,8 @@ class VendingMachine implements VendingMachineInterface
 
     public function getInsertedMoney(): MoneyCollectionInterface
     {
-        $this->moneyCollection->merge();
-        return $moneyCollection;
+        $this->moneyCollection = $this->input->getMoneyCollection();
+        return $this->moneyCollection;
     }
 
     public function handleAction(ActionInterface $action): ResponseInterface
@@ -312,9 +324,16 @@ $itemC->setPrice(1.5);
 $readline = readline('Input: ');
 $inputParser = new InputParser;
 $inputHandler = new InputHandler($inputParser->parse($readline));
+$input = $inputHandler->getInput();
+$itemCollection = new ItemCollection;
+$action = $input->getAction();
+
+$vendingMachine = new VendingMachine($itemCollection, $input);
+$response = $action->handle($vendingMachine);
+
+echo $response->__toString();
 
 
-$vendingMachine = new VendingMachine;
 $vendingMachine->addItem($itemA);
 $vendingMachine->addItem($itemB);
 $vendingMachine->addItem($itemC);
