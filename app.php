@@ -60,14 +60,14 @@ class MoneyCollection implements MoneyCollectionInterface
     public function merge(MoneyCollectionInterface $moneyCollection): void
     {   
 
-        $this->moneyCollection = array_merge($this->moneyCollection, $moneyCollection);
-/*         $string = "";
+/*         $this->moneyCollection = array_merge($this->moneyCollection, $moneyCollection); */
+        $string = "";
         foreach ($this->moneyCollection as $money)
         {
             $string .= $money->getSymbol(). ", ";
             $cutString = substr($string, 0, -2);
             $this->merge = $cutString;
-        } */
+        }
     }
 
     public function empty(): void
@@ -284,7 +284,10 @@ class VendingMachine implements VendingMachineInterface
     public function insertMoney(MoneyInterface $money): void
     {
         $this->moneyCollection->add($money);
-        echo 'Current ballance: ' . $this->moneyCollection->sum() . '' . '(' . $money->getSymbol() . ')';
+        echo 'Current ballance: ' . $this->moneyCollection->sum(); 
+        foreach ($this->moneyCollection->toArray() as $money) {
+            echo $money->getSymbol();
+        }
     }
 
     public function getInsertedMoney(): MoneyCollectionInterface
@@ -319,20 +322,24 @@ $itemC->setCount(1);
 $itemC->setPrice(1.5);
 
 
-$readline = readline('Input: ');
-$inputParser = new InputParser;
-$inputHandler = new InputHandler($inputParser->parse($readline));
-$input = $inputHandler->getInput();
-$action = $input->getAction();
+
+
 
 $vendingMachine = new VendingMachine;
+do {
+    $readline = readline('Input: ');
+    $inputParser = new InputParser;
+    $inputHandler = new InputHandler($inputParser->parse($readline));
+    $input = $inputHandler->getInput();
+    foreach ($input->getMoneyCollection()->toArray() as $money) {
+        $vendingMachine->insertMoney($money);
+    }
+} while ($input->getMoneyCollection());
 $vendingMachine->addItem($itemA);
 $vendingMachine->addItem($itemB);
 $vendingMachine->addItem($itemC);
 
-foreach ($input->getMoneyCollection()->toArray() as $money) {
-    $vendingMachine->insertMoney($money);
-}
+
 
 
 
