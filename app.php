@@ -59,13 +59,15 @@ class MoneyCollection implements MoneyCollectionInterface
 
     public function merge(MoneyCollectionInterface $moneyCollection): void
     {   
-        $string = "";
+
+        $this->moneyCollection = array_merge($this->moneyCollection, $moneyCollection);
+/*         $string = "";
         foreach ($this->moneyCollection as $money)
         {
             $string .= $money->getSymbol(). ", ";
             $cutString = substr($string, 0, -2);
             $this->merge = $cutString;
-        }
+        } */
     }
 
     public function empty(): void
@@ -156,11 +158,10 @@ class Action implements ActionInterface
     
     public function handle(VendingMachineInterface $vendingMachine): ResponseInterface
     {
-        $action = $vendingMachine->getInsertedMoney()->toArray();
-        foreach ($action as $value) {
-            $response = new Response($value->getSymbol());
+        if ($this->name == 'RETURN-MONEY') {
+            $response = $vendingMachine->getInsertedMoney()->merge($vendingMachine->getInsertedMoney());
         }
-        return $response;
+        return new Response($response);
     }
 
     public function getName(): string
@@ -193,7 +194,7 @@ class Input implements InputInterface
 
 class InputHandler implements InputHandlerInterface
 {   
-    public Input $input;
+    private Input $input;
 
     public function __construct(Input $input)
     {
@@ -217,27 +218,26 @@ class InputParser implements InputParserInterface
      */
     public function parse(string $input): InputInterface
     {
-        $inputCommands = ['N','D','Q','DOLLAR','GET-A','GET-B','GET-C','RETURN-MONEY'];  
-        if (in_array($input, $inputCommands)) {
-           $name = $input;
-           
-
+        $inputActions = ['GET-A','GET-B','GET-C','RETURN-MONEY'];  
+/*         if (in_array($input, $inputActions)) {
+            $action = new Action($input);
         } else {
             echo "Insert correct action";
+        } */
+        $inputMap = [
+            'N' => $nickel = new Money(0.05, 'N'),
+            'D' => $dime = new Money(0.10, 'D'),
+            'Q' => $quarter = new Money(0.25, 'Q'),
+            'DOLLAR' => $dollar = new Money(1.00, 'DOLLAR')
+        ];
+        foreach ($inputMap as $key => $money) {
+            if ($input == $key) {
+                $money;
+                $moneyCollection = new MoneyCollection;
+                $moneyCollection->add($money);
+            }
         }
-      
-        $action = new Action($name);
-        $moneyCollection = new MoneyCollection;
-        $nickel = new Money(0.05, 'N');
-        $dime = new Money(0.10, 'D');
-        $quarter = new Money(0.25, 'Q');
-        $dollar = new Money(1.00, 'DOLLAR');
-        $moneyCollection->add($dollar);
- 
-
-
-
-
+        $action = new Action($input);
         return new Input($moneyCollection, $action); 
     }
 }
@@ -264,15 +264,13 @@ class Response implements ResponseInterface
 class VendingMachine implements VendingMachineInterface
 {
     private ItemCollection $itemCollection;
-    public $moneyCollection;
-    private Input $input;
+    private MoneyCollection $moneyCollection;
 
-    public function __construct($itemCollection, $input)
+    public function __construct()
     {
-        $this->itemCollection = $itemCollection;
-        $this->input = $input;
+        $this->itemCollection = new ItemCollection;
+        $this->moneyCollection = new MoneyCollection;
     }
-
     public function addItem(ItemInterface $item): void    
     {   
         $this->itemCollection->add($item);
@@ -285,19 +283,19 @@ class VendingMachine implements VendingMachineInterface
 
     public function insertMoney(MoneyInterface $money): void
     {
-        $moneyCollection->add($money);
+        $this->moneyCollection->add($money);
+        echo 'Current ballance: ' . $this->moneyCollection->sum() . '' . '(' . $money->getSymbol() . ')';
     }
 
     public function getInsertedMoney(): MoneyCollectionInterface
     {
-        $this->moneyCollection = $this->input->getMoneyCollection();
-        return $this->moneyCollection;
+       
+
     }
 
     public function handleAction(ActionInterface $action): ResponseInterface
     {
-        $name = $action->getName();
-        $response = new Response($name);
+
         return $response;
     }
 }
@@ -325,21 +323,21 @@ $readline = readline('Input: ');
 $inputParser = new InputParser;
 $inputHandler = new InputHandler($inputParser->parse($readline));
 $input = $inputHandler->getInput();
-$itemCollection = new ItemCollection;
 $action = $input->getAction();
 
-$vendingMachine = new VendingMachine($itemCollection, $input);
-$response = $action->handle($vendingMachine);
-
-echo $response->__toString();
-
-
+$vendingMachine = new VendingMachine;
 $vendingMachine->addItem($itemA);
 $vendingMachine->addItem($itemB);
 $vendingMachine->addItem($itemC);
 
+foreach ($input->getMoneyCollection()->toArray() as $money) {
+    $vendingMachine->insertMoney($money);
+}
 
-var_dump($vendingMachine);
+
+
+
+/* var_dump($vendingMachine); */
 
 
 
