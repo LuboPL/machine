@@ -43,22 +43,20 @@ do {
     $inputParser = new InputParser;
     $input = $inputParser->parse($readline);
     $action = $input->getAction();
-    $actionName = $input->getAction()->getName();
-    if (in_array($actionName, $insert = ['Q','D','N','DOLLAR'])) {
+    $actionName = $action->getName();
+    if (in_array($actionName, $inputValue = ['Q','D','N','DOLLAR'])) {
         foreach ($insertedMoney = $input->getMoneyCollection()->toArray() as $money) {
             $vendingMachine->insertMoney($money);
         }
     }
     if ($actionName == 'RETURN-MONEY' && $vendingMachine->getInsertedMoney()->moneyCollection !== null)  {
-        $action->handle($vendingMachine)->__toString();
+        $action->handle($vendingMachine);
         $vendingMachine->getInsertedMoney()->empty();
     }
     elseif (in_array($actionName, $actions = ['A','B','C'] ) && $vendingMachine->getInsertedMoney()->moneyCollection !== null) {
         $vendingMachine->handleAction($input->getAction());
     }  
 } while ($actionName);
-
-
 
 
 

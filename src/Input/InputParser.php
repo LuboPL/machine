@@ -10,9 +10,6 @@ use VendingMachine\Input\Input;
 
 class InputParser implements InputParserInterface
 {
-    /**
-     * @throws InvalidInputException
-     */
     public function parse(string $input): InputInterface
     {
         $moneyCollection = new MoneyCollection;

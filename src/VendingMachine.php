@@ -56,9 +56,9 @@ class VendingMachine implements VendingMachineInterface
             switch ($actionName) {
                 case "A":
                     foreach ($this->itemCollection as $item) {
-                        foreach ($item as $itemInMachine) {
-                            if ($itemInMachine->getSymbol() == 'A') {
-                                $item = $itemInMachine;
+                        foreach ($item as $itemInVendingMachine) {
+                            if ($itemInVendingMachine->getSymbol() == 'A') {
+                                $item = $itemInVendingMachine;
                             }
                         }
                     }
@@ -78,9 +78,9 @@ class VendingMachine implements VendingMachineInterface
 
                 case "B":
                     foreach ($this->itemCollection as $item) {
-                        foreach ($item as $itemInMachine) {
-                            if ($itemInMachine->getSymbol() == 'B') {
-                                $item = $itemInMachine;
+                        foreach ($item as $itemInVendingMachine) {
+                            if ($itemInVendingMachine->getSymbol() == 'B') {
+                                $item = $itemInVendingMachine;
                             }
                         }
                     }
@@ -100,9 +100,9 @@ class VendingMachine implements VendingMachineInterface
 
                 case "C":
                     foreach ($this->itemCollection as $item) {
-                        foreach ($item as $itemInMachine) {
-                            if ($itemInMachine->getSymbol() == 'C') {
-                                $item = $itemInMachine;
+                        foreach ($item as $itemInVendingMachine) {
+                            if ($itemInVendingMachine->getSymbol() == 'C') {
+                                $item = $itemInVendingMachine;
                             }
                         }
                     }
