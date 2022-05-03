@@ -1,6 +1,7 @@
 <?php
 namespace VendingMachine;
 use VendingMachine\Action\ActionInterface;
+use VendingMachine\Action\Action;
 use VendingMachine\Item\ItemInterface;
 use VendingMachine\Item\ItemCollectionInterface;
 use VendingMachine\Input\InputInterface;
@@ -9,6 +10,7 @@ use VendingMachine\Input\InputHandlerInterface;
 use VendingMachine\Money\MoneyCollectionInterface;
 use VendingMachine\Money\MoneyInterface;
 use VendingMachine\Response\ResponseInterface;
+use VendingMachine\Response\Response;
 require_once 'vendor/autoload.php';
 
 // Implement me
@@ -137,7 +139,7 @@ class ItemCollection implements ItemCollectionInterface
     }
 }
 
-class Action implements ActionInterface
+/* class Action implements ActionInterface
 {
     private string $name;
 
@@ -159,7 +161,7 @@ class Action implements ActionInterface
     {
         return $this->name;
     }
-}
+} */
 
 class Input implements InputInterface
 {
@@ -251,7 +253,7 @@ class InputParser implements InputParserInterface
     }
 }
 
-class Response implements ResponseInterface
+/* class Response implements ResponseInterface
 {
     private string $response;
 
@@ -268,7 +270,7 @@ class Response implements ResponseInterface
     {
         return 0;
     }
-}
+} */
 
 class VendingMachine implements VendingMachineInterface
 {
