@@ -3,11 +3,13 @@ namespace VendingMachine;
 use VendingMachine\Action\ActionInterface;
 use VendingMachine\Action\Action;
 use VendingMachine\Item\ItemInterface;
+use VendingMachine\Item\Item;
 use VendingMachine\Item\ItemCollectionInterface;
 use VendingMachine\Input\InputInterface;
 use VendingMachine\Input\InputParserInterface;
 use VendingMachine\Input\InputHandlerInterface;
 use VendingMachine\Money\MoneyCollectionInterface;
+use VendingMachine\Money\MoneyCollection;
 use VendingMachine\Money\MoneyInterface;
 use VendingMachine\Money\Money;
 use VendingMachine\Response\ResponseInterface;
@@ -38,7 +40,7 @@ require_once 'vendor/autoload.php';
     }
 } */
 
-class MoneyCollection implements MoneyCollectionInterface
+/* class MoneyCollection implements MoneyCollectionInterface
 {
     public $moneyCollection;
     private array $merge;
@@ -74,9 +76,9 @@ class MoneyCollection implements MoneyCollectionInterface
     {
         return $this->moneyCollection;
     }
-}
+} */
 
-class Item implements ItemInterface
+/* class Item implements ItemInterface
 {
     private int $count;
     private float $price;
@@ -111,7 +113,7 @@ class Item implements ItemInterface
     {
         return $this->symbol;
     }
-}
+} */
 
 class ItemCollection implements ItemCollectionInterface
 {
