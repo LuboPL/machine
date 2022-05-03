@@ -9,13 +9,14 @@ use VendingMachine\Input\InputParserInterface;
 use VendingMachine\Input\InputHandlerInterface;
 use VendingMachine\Money\MoneyCollectionInterface;
 use VendingMachine\Money\MoneyInterface;
+use VendingMachine\Money\Money;
 use VendingMachine\Response\ResponseInterface;
 use VendingMachine\Response\Response;
 require_once 'vendor/autoload.php';
 
 // Implement me
 
-class Money implements MoneyInterface
+/* class Money implements MoneyInterface
 {
     private float $value;
     private string $symbol;
@@ -35,7 +36,7 @@ class Money implements MoneyInterface
     {
         return $this->symbol;
     }
-}
+} */
 
 class MoneyCollection implements MoneyCollectionInterface
 {
