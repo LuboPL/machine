@@ -9,6 +9,7 @@ use VendingMachine\Item\ItemCollection;
 use VendingMachine\Input\InputInterface;
 use VendingMachine\Input\Input;
 use VendingMachine\Input\InputParserInterface;
+use VendingMachine\Input\InputParser;
 use VendingMachine\Input\InputHandlerInterface;
 use VendingMachine\Input\InputHandler;
 use VendingMachine\Money\MoneyCollectionInterface;
@@ -204,11 +205,8 @@ require_once 'vendor/autoload.php';
     }
 } */
 
-class InputParser implements InputParserInterface
+/* class InputParser implements InputParserInterface
 {
-    /**
-     * @throws InvalidInputException
-     */
     public function parse(string $input): InputInterface
     {
         $moneyCollection = new MoneyCollection;
@@ -253,7 +251,7 @@ class InputParser implements InputParserInterface
 
         return new Input($moneyCollection, $action); 
     }
-}
+} */
 
 /* class Response implements ResponseInterface
 {
