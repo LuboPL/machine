@@ -5,6 +5,7 @@ use VendingMachine\Action\Action;
 use VendingMachine\Item\ItemInterface;
 use VendingMachine\Item\Item;
 use VendingMachine\Item\ItemCollectionInterface;
+use VendingMachine\Item\ItemCollection;
 use VendingMachine\Input\InputInterface;
 use VendingMachine\Input\InputParserInterface;
 use VendingMachine\Input\InputHandlerInterface;
@@ -115,7 +116,7 @@ require_once 'vendor/autoload.php';
     }
 } */
 
-class ItemCollection implements ItemCollectionInterface
+/* class ItemCollection implements ItemCollectionInterface
 {
     public $itemCollection;
    
@@ -123,9 +124,7 @@ class ItemCollection implements ItemCollectionInterface
     {
         $this->itemCollection[] = $item;
     }
-    /**
-     * @throws ItemNotFoundException
-     */
+
     public function get(ItemInterface $item): ItemInterface
     {
         return $item;
@@ -140,7 +139,7 @@ class ItemCollection implements ItemCollectionInterface
     {
         $this->itemCollection = null;
     }
-}
+} */
 
 /* class Action implements ActionInterface
 {
