@@ -7,6 +7,7 @@ use VendingMachine\Item\Item;
 use VendingMachine\Item\ItemCollectionInterface;
 use VendingMachine\Item\ItemCollection;
 use VendingMachine\Input\InputInterface;
+use VendingMachine\Input\Input;
 use VendingMachine\Input\InputParserInterface;
 use VendingMachine\Input\InputHandlerInterface;
 use VendingMachine\Money\MoneyCollectionInterface;
@@ -165,7 +166,7 @@ require_once 'vendor/autoload.php';
     }
 } */
 
-class Input implements InputInterface
+/* class Input implements InputInterface
 {
     private MoneyCollection $moneyCollection;
     private Action $action;
@@ -185,7 +186,7 @@ class Input implements InputInterface
     {   
         return $this->action;
     }
-}
+} */
 
 class InputHandler implements InputHandlerInterface
 {   
@@ -195,9 +196,7 @@ class InputHandler implements InputHandlerInterface
     {
         $this->input = $input;
     }
-      /**
-     * @throws InvalidInputException
-     */
+
     public function getInput(): InputInterface
     {
         return $this->input;
